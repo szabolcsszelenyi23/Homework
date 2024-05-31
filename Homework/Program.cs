@@ -264,6 +264,18 @@ namespace Homework
             }
 
             SavePurchasesToFile(purchases);
+
+            static void SavePurchasesToFile(List<Purchase> purchases)
+            {
+                using (StreamWriter writer = new StreamWriter("purchases.txt"))
+                {
+                    foreach (var purchase in purchases)
+                    {
+                        writer.WriteLine(purchase);
+                    }
+                }
+                Console.WriteLine("Purchases have been saved to purchases.txt");
+            }
         }
 
         static void SavePurchasesToFile(List<Purchase> purchases)

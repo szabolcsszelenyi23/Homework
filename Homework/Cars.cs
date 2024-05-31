@@ -61,6 +61,11 @@ namespace Homework
             }
         }
 
+        public List<int> GetPrices()
+        {
+            return prices;
+        }
+
         public void ListColors(string model)
         {
             if (colors.ContainsKey(model))
