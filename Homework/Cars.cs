@@ -12,6 +12,9 @@ namespace Homework
         private string make;
         private List<string> models { get; set; }
         private List<int> prices { get; set; }
+        private Dictionary<string, List<string>> modelColors { get; set; } // Új tulajdonság a színekhez
+        private Dictionary<string, Dictionary<string, int>> colorSurcharges { get; set; } // Új tulajdonság a szín-felárakhoz
+
 
         public string Make
         {
@@ -100,11 +103,49 @@ namespace Homework
             return model;
         }
 
+        public void AddColors(string model, List<string> colors)
+        {
+            if (modelColors.ContainsKey(model))
+            {
+                modelColors[model].AddRange(colors);
+            }
+        }
+
+        public void AddColorSurcharge(string model, string color, int surcharge)
+        {
+            if (colorSurcharges.ContainsKey(model))
+            {
+                colorSurcharges[model][color] = surcharge;
+            }
+        }
+
+        public void ListColors(string model)
+        {
+            if (modelColors.ContainsKey(model))
+            {
+                Console.WriteLine($"Available colors for {model}: {string.Join(", ", modelColors[model])}");
+            }
+        }
+
+        public int GetPriceWithColor(string model, string color)
+        {
+            if (models.Contains(model) && modelColors[model].Contains(color))
+            {
+                int modelIndex = models.IndexOf(model);
+                int basePrice = prices[modelIndex];
+                int surcharge = colorSurcharges[model].ContainsKey(color) ? colorSurcharges[model][color] : 0;
+                return basePrice + surcharge;
+            }
+            return -1;
+        }
+
         public Cars(string make)
         {
             this.make = make;
             models = new List<string>();
             prices = new List<int>();
+            modelColors = new Dictionary<string, List<string>>(); // Inicializálás a színekhez
+            colorSurcharges = new Dictionary<string, Dictionary<string, int>>(); // Inicializálás a felárakhoz
         }
     }
 }
