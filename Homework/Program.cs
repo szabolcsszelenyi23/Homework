@@ -11,6 +11,8 @@ namespace Homework
     {
         static void Main(string[] args)
         {
+            List<Purchase> purchases = new List<Purchase>();
+
             Shop japanShop = new Shop("Japan Car Shop.");
             Shop luxuryShop = new Shop("Luxury Car Shop.");
 
@@ -144,6 +146,13 @@ namespace Homework
 
             while (true)
             {
+                Console.WriteLine("Please select what you would like to do: ");
+                Console.WriteLine("Enter 1 if you want to list every car shop from the city.");
+                Console.WriteLine("Enter 2 if you want to select a car shop and list its cars.");
+                Console.WriteLine("Enter 3 if you want to see the cheapest car for sale.");
+                Console.WriteLine("Enter 4 if you want to see the most expensive car for sale.");
+                Console.WriteLine("Press Enter if you want to exit.");
+
                 string input = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -153,115 +162,16 @@ namespace Homework
                 switch (input)
                 {
                     case "1":
-                        Console.WriteLine("Car shops in the city. Which one would you like to choose: ");
-                        Console.WriteLine("1 " + japanShop.Name);
-                        Console.WriteLine("2 " + luxuryShop.Name);
+                        Console.WriteLine("Car shops in the city:");
+                        Console.WriteLine(japanShop.Name);
+                        Console.WriteLine(luxuryShop.Name);
+                        break;
 
+                    case "2":
+                        Console.WriteLine("Select a car shop:");
+                        Console.WriteLine("1: Japan Car Shop");
+                        Console.WriteLine("2: Luxury Car Shop");
                         string shopSelection = Console.ReadLine();
-
-                        /*if (shopSelection == "1")
-                        {
-                            Console.WriteLine("Welcome to the Japan Car Shop. Which brand would you like to choose: ");
-                            japanShop.ListCars();
-                            string carSelection = Console.ReadLine().ToLower();
-
-                            if(carSelection == "toyota")
-                            {
-                                Console.WriteLine("This is our selection from the Toyota: ");
-                                toyota.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-
-                                toyota.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "mitsubishi")
-                            {
-                                Console.WriteLine("This is our selection from the Mitsubishi: ");
-                                mitsubishi.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-   
-                                mitsubishi.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "nissan")
-                            {
-                                Console.WriteLine("This is our selection from the Nissan: ");
-                                nissan.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-
-                                nissan.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "honda")
-                            {
-                                Console.WriteLine("This is our selection from the Honda: ");
-                                honda.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-                                
-                                honda.SelectModel(modelSelection);
-                            }
-
-                            else
-                            {
-                                Console.WriteLine("Invalid selection. Please try again.");
-                            }
-
-                        }
-                        else if (shopSelection == "2")
-                        {
-                            Console.WriteLine("Welcome to the Luxury Car Shop. Which brand would you like to choose: ");
-                            luxuryShop.ListCars();
-                            string carSelection = Console.ReadLine().ToLower();
-                            if (carSelection == "bmw")
-                            {
-                                Console.WriteLine("This is our selection from the Toyota: ");
-                                bmw.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-                                
-                                bmw.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "aston martin")
-                            {
-                                Console.WriteLine("This is our selection from the Mitsubishi: ");
-                                astonmartin.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-                                
-                                astonmartin.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "ferrari")
-                            {
-                                Console.WriteLine("This is our selection from the Nissan: ");
-                                ferrari.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-                                
-                                ferrari.SelectModel(modelSelection);
-                            }
-
-                            else if (carSelection == "audi")
-                            {
-                                Console.WriteLine("This is our selection from the Honda: ");
-                                audi.ListModelsAndPrices();
-
-                                string modelSelection = Console.ReadLine().ToLower();
-                                
-                                audi.SelectModel(modelSelection);
-                            }
-
-                            else
-                            {
-                                Console.WriteLine("Invalid selection. Please try again.");
-                            }
-
-                        }*/
 
                         Shop selectedShop = null;
                         if (shopSelection == "1")
@@ -305,6 +215,20 @@ namespace Homework
                                 int monthlyCost = insurance.CalculateMonthlyCost();
                                 Console.WriteLine($"The final price for the {selectedModel} in {selectedColor} is {finalPrice} $");
                                 Console.WriteLine($"The monthly insurance cost is {monthlyCost} $");
+
+                                Console.WriteLine("Are you satisfied with this purchase? (yes/no)");
+                                string satisfactionChoice = Console.ReadLine();
+
+                                if (satisfactionChoice.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Purchase purchase = new Purchase(selectedShop.Name, selectedModel, selectedColor, finalPrice, monthlyCost);
+                                    purchases.Add(purchase);
+                                    Console.WriteLine("Purchase has been added to your list.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Purchase has been canceled. Please start again.");
+                                }
                             }
                             else
                             {
@@ -315,18 +239,6 @@ namespace Homework
                         {
                             Console.WriteLine("Invalid car model selection. Please try again.");
                         }
-                        break;
-                        else
-                        {
-                            Console.WriteLine("Invalid selection. Please try again.");
-                        }
-                        break;
-
-                    case "2":
-                        Console.WriteLine("Cars on sale in the Japan Car Shop:");
-                        japanShop.ListCars();
-                        Console.WriteLine("Cars on sale in the Luxury Car Shop:");
-                        luxuryShop.ListCars();
                         break;
 
                     case "3":
@@ -350,6 +262,20 @@ namespace Homework
                         break;
                 }
             }
+
+            SavePurchasesToFile(purchases);
+        }
+
+        static void SavePurchasesToFile(List<Purchase> purchases)
+        {
+            using (StreamWriter writer = new StreamWriter("purchases.txt"))
+            {
+                foreach (var purchase in purchases)
+                {
+                    writer.WriteLine(purchase);
+                }
+            }
+            Console.WriteLine("Purchases have been saved to purchases.txt");
         }
     }
 }
