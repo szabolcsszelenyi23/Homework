@@ -67,6 +67,11 @@ namespace Homework
             return prices;
         }
 
+        public bool HasModel(string model)
+        {
+            return models.Contains(model);
+        }
+
         public int MostExpensiveCar()
         {
             if (prices.Count == 0)

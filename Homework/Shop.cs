@@ -66,6 +66,23 @@ namespace Homework
             return mostExpensivePrice;
         }
 
+        public List<Cars> GetCars()
+        {
+            return cars;
+        }
+
+        public Cars GetCarByModel(string model)
+        {
+            foreach (var car in cars)
+            {
+                if (car.HasModel(model))
+                {
+                    return car;
+                }
+            }
+            return null;
+        }
+
         public Shop(string name)
         {
             this.name = name;
