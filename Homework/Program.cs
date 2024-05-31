@@ -146,13 +146,6 @@ namespace Homework
 
             while (true)
             {
-                Console.WriteLine("Please select what you would like to do: ");
-                Console.WriteLine("Enter 1 if you want to list every car shop from the city.");
-                Console.WriteLine("Enter 2 if you want to select a car shop and list its cars.");
-                Console.WriteLine("Enter 3 if you want to see the cheapest car for sale.");
-                Console.WriteLine("Enter 4 if you want to see the most expensive car for sale.");
-                Console.WriteLine("Press Enter if you want to exit.");
-
                 string input = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(input))
                 {
